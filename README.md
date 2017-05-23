@@ -1,5 +1,6 @@
-# fsdse-python-assignment-171
-## Find the longest common substring
+# Given two strings, find the longest common substring.
+
+## Constraints
 * Can we assume the inputs are valid?
   * No
 * Can we assume the strings are ASCII?

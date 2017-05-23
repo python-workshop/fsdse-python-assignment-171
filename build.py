@@ -1,16 +1,34 @@
-def longestSubstringFinder(string1, string2):
-    answer = ""
-    len1, len2 = len(string1), len(string2)
-    for i in range(len1):
-        match = ""
-        for j in range(len2):
-            if (i + j < len1 and string1[i + j] == string2[j]):
-                match += string2[j]
+def longest_common_substr(str0, str1):
+    if str0 is None or str1 is None:
+        raise TypeError('str input cannot be None')
+    # Add one to number of rows and cols for the dp table's
+    # first row of 0's and first col of 0's
+    num_rows = len(str0) + 1
+    num_cols = len(str1) + 1
+    T = [[None] * num_cols for _ in range(num_rows)]
+    for i in range(num_rows):
+        for j in range(num_cols):
+            if i == 0 or j == 0:
+                T[i][j] = 0
+            elif str0[j - 1] != str1[i - 1]:
+                T[i][j] = max(T[i][j - 1],
+                              T[i - 1][j])
             else:
-                if (len(match) > len(answer)): answer = match
-                match = ""
-    return answer
-
-print(longestSubstringFinder("apple pie available", "apple pies"))
-print(longestSubstringFinder("apples", "appleses"))
-print(longestSubstringFinder("bapples", "cappleses"))
+                T[i][j] = T[i - 1][j - 1] + 1
+    results = ''
+    i = num_rows - 1
+    j = num_cols - 1
+    # Walk backwards to determine the substring
+    while T[i][j]:
+        if T[i][j] == T[i][j - 1]:
+            j -= 1
+        elif T[i][j] == T[i - 1][j]:
+            i -= 1
+        elif T[i][j] == T[i - 1][j - 1] + 1:
+            results += str1[i - 1]
+            i -= 1
+            j -= 1
+        else:
+            raise Exception('Error constructing table')
+    # Walking backwards results in a string in reverse order
+    return results[::-1]
